@@ -13,8 +13,6 @@ X=[ 0 4;
     2 0;
     2 1;
     2 2];
-v_write = VideoWriter('out.avi');
-open(v_write);
 videoFileReader = vision.VideoFileReader('o.ogv');
 firstframe= step(videoFileReader);
 
@@ -33,8 +31,9 @@ pointTracker = vision.PointTracker('MaxBidirectionalError', 2);
 % video frame.
 initialize(pointTracker, double(points), rgb2gray(firstframe));
 
-
-while ~isDone(videoFileReader)
+i=0;
+while i<60
+    i=i+1;
     % get the next frame
     videoFrame = step(videoFileReader);
     coord_cube=augment(videoFrame, pointTracker, X);
@@ -43,11 +42,28 @@ while ~isDone(videoFileReader)
     I=rgb2gray(videoFrame);
     imshow(I), hold on,
     plot(coord_cube(:,1),coord_cube(:,2),'r')
-    saveas(h,'aug_img.png');
+    path='./frames';
+    frame_pic = strcat('frame', num2str(i), '.png');
+    saveas(h,fullfile(path,frame_pic));
+    close(gcf)
     %Save augmented frame to new video
 %     I_A=imread('au_img.png');
 %     
 %     writeVideo(v,I_A);
     
 end
-close(v_write);
+vidObj = VideoWriter('aug_video.avi');
+vidObj.FrameRate=23;
+open(vidObj);
+
+for i=1:29
+      path='./frames/';
+      frame_pic = strcat('frame', num2str(i), '.png');
+      frame_pic=strcat(path, frame_pic);
+      Img=imread(frame_pic);
+      %add the image to your movie:
+      f = im2frame(Img);
+      writeVideo(vidObj,f);
+  
+end
+close(vidObj)

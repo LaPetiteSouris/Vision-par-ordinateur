@@ -8,8 +8,8 @@ function coord_cube=augment(videoFrame, pointTracker, caliberated_points)
     [points, isFound] = step(pointTracker, rgb2gray(videoFrame));
     visiblePoints = points(isFound, :);
     caliberated_points=caliberated_points(isFound,:);
-    caliberated_points=caliberated_points'
-    visiblePoints=visiblePoints'
+    caliberated_points=caliberated_points';
+    visiblePoints=visiblePoints';
     if ~isempty(visiblePoints)
          
          H=getH_Homo(visiblePoints,caliberated_points);
