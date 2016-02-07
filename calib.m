@@ -27,7 +27,21 @@ E
 [R,K] = qr(P);
 
 
+c=[0 0 0 1; 0 1 0 1;   1 1 0 1; 1 0 0 1;  1 0 1 1; 0 0 1 1; 0 1 1 1; 1 1 1 1;1 0 1 1; 0 0 1 1; 0 0 0 1;
+    1 0 0 1 ; 1 1 0 1; 0 1 0 1;0 1 1 1 ;1 1 1 1;1 1 0 1];
+c=c';
+est=P*c;
+h=size(c,2);
+
+for i=1:h
+    for k=1:3
+    est(k,i)=est(k,i)/est(3,i);
+    end
+    
+end
+
+est=est';
 % 
-% figure, imshow(ia), hold on, title('Detected features frame 2');
-% plot(proj(:,1),proj(:,2),'go')
+figure, imshow(ia), hold on, title('Detected features frame 2');
+plot(est(:,1),est(:,2),'r')
 

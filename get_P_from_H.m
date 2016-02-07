@@ -1,7 +1,7 @@
 function P=get_P_from_H(H,K);
 
 % On d e t e rm in e [R| t ] a p a r t i r de H
-Pt = K\H ;
+Pt = inv(K)*H ;
 Pk = zeros( 3 , 4 ) ;
 Pk ( : , 1 ) = Pt ( : , 1 ) ;
 Pk ( : , 2 ) = Pt ( : , 2 ) ;

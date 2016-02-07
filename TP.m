@@ -23,11 +23,11 @@ p_x=m';
 g_X=M';
 % 
 % 
-% petit_x2=[751 665 ; 78 21 ; 765 589; 705 166 ; 621 578; 850 608 ];
-% p_x2=petit_x2';
-% H=getH_Homo(p_x,p_x2);
-% 
-% H=[H' 1];
+petit_x2=[751 665 ; 78 21 ; 765 589; 705 166 ; 621 578; 850 608 ];
+p_x2=petit_x2';
+H=getH_Homo(p_x,p_x2);
+
+H=[H' 1];
 % H = reshape(H, 3, 3)';
 % %Verification
 P=getP(p_x,g_X);
