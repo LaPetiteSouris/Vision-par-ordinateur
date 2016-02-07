@@ -32,7 +32,7 @@ pointTracker = vision.PointTracker('MaxBidirectionalError', 2);
 initialize(pointTracker, double(points), rgb2gray(firstframe));
 
 i=0;
-while i<60
+while i<65
     i=i+1;
     % get the next frame
     videoFrame = step(videoFileReader);
@@ -46,17 +46,14 @@ while i<60
     frame_pic = strcat('frame', num2str(i), '.png');
     saveas(h,fullfile(path,frame_pic));
     close(gcf)
-    %Save augmented frame to new video
-%     I_A=imread('au_img.png');
-%     
-%     writeVideo(v,I_A);
-    
+
+
 end
 vidObj = VideoWriter('aug_video.avi');
 vidObj.FrameRate=23;
 open(vidObj);
-
-for i=1:29
+ %Save augmented frames to new video
+for i=1:64
       path='./frames/';
       frame_pic = strcat('frame', num2str(i), '.png');
       frame_pic=strcat(path, frame_pic);
