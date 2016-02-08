@@ -6,16 +6,42 @@
 %Load image
 clear all
 clc
-ia=imread('check.jpg');
+% ia=imread('check.jpg');
 % imshow(ia)
-grand_X=[0 0 0 1;     1 0 0 1;     1 1 0 1;    3 2 0 1;    2 0 1 1;     1 0 3 1];
-petit_x=[1703 1506 ; 1491 1542 ;  1575 1722;   1167 2058 ; 1283 1422;   1627 946 ];
-p_x=petit_x';
-g_X=grand_X';
+% grand_X=[0 0 0 1;     1 0 0 1;     1 1 0 1;    3 2 0 1;    2 0 1 1;     1 0 3 1];
+% petit_x=[1703 1506 ; 1491 1542 ;  1575 1722;   1167 2058 ; 1283 1422;   1627 946 ];
+
+img = imread('droite0.png');   %lire image
+imshow(img);
+m = [  750 592   1;
+       737  773  1;
+      571  471   1;
+     913  473   1;
+      701 645   1;
+       1081 413  1];
+
+
+M = [0 0 0 1;
+     4 4 0 1;
+     4 0 4 1;
+     0 4 4 1;
+     2 1 0 1;
+     0 7 6 1];
+p_x=m';
+g_X=M';
 %Calucate P
 P=getP(p_x,g_X);
 %Decompose to get K
-[R,K] = qr(P);
+
+[K,R]=rq(P(:,1:3));
+T = diag(sign(diag(K)));
+K=K*T;
+% K = dot(K,T)
+% for i=1:3
+%     for k=1:3
+%         K(i,k)=K(i,k)/K(3,k);
+%     end
+% end
 E=0;
 h=size(g_X,2);
 

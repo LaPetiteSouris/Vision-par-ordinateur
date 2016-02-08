@@ -1,8 +1,7 @@
 % % % We have to extract the 1st frame of the video for calibeartion
 % % % Firstly, we detect Harris features points, then manually define the coordinate of
 % % % those points in world coordinate. These points are our tracking points.
-close all;
-clear all;
+
 v = VideoReader('o.ogv');
 I = read(v, 1);
 I = rgb2gray(I);
@@ -10,9 +9,24 @@ points = detectHarrisFeatures(I);
 
 figure, imshow(I), hold on, title('Detected features frame 1');
 plot(points(15: 23));
-K = [ -1161         112        - 484;
-      0         446       - 1133;
-      0           0           1];
+%     K = [ -1161         112        -484;
+%                0         446       -1133;
+%                0           0           1];   
+
+
+ K=[1.3280e+03 0 0;
+     0 1.3749e+03 0;
+     1.0511e+03 -1.2482e+03 1;]
+ K=K';
+
+%  K=[ 0.11207961  0.03011797  0;      
+%  0.          0.04618539  0.        ;
+%   0.          0.          0.        ]
+%  
+
+
+
+
 
 % Tracking points in world coordinate
 
@@ -27,7 +41,7 @@ X = [1 0;
      1 5 ;
      0 4;
      0 5];
-;
+
 % Image coordinate of tracking points in 1st frame
 x = [303 693;
      402 682;
@@ -42,14 +56,14 @@ x = [303 693;
      276.4 1187;
     ];
 % Using 2 pairs of vectors points, calcuate Homography matrix and the Projection matrix
-x = x'
-    X=X'
-    H = getH_Homo(x, X);
+x = x';
+X=X';
+H = getH_Homo(x, X);
 P = get_P_from_H(H, K);
 
 % Testing by projecting a cube on the caliberated image
-c = [0 0 0 1; 0 1 0 1;   1 1 0 1; 1 0 0 1;  1 0 0.3 1; 0 0 0.3 1; 0 1 0.3 1; 1 1 0.3 1; 1 0 0.3 1; 0 0 0.3 1; 0 0 0 1;
-     1 0 0 1 ; 1 1 0 1; 0 1 0 1; 0 1 0.3 1 ; 1 1 0.3 1; 1 1 0 1];
+c = [0 0 0 1; 0 1 0 1;   1 1 0 1; 1 0 0 1;  1 0 1 1; 0 0 1 1; 0 1 1 1; 1 1 1 1; 1 0 1 1; 0 0 1 1; 0 0 0 1;
+     1 0 0 1 ; 1 1 0 1; 0 1 0 1; 0 1 1 1 ; 1 1 1 1; 1 1 0 1];
 
 c = c';
     est=P*c;
