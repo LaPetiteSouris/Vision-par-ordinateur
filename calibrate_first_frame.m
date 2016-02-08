@@ -1,64 +1,69 @@
+% % % We have to extract the 1st frame of the video for calibeartion
+% % % Firstly, we detect Harris features points, then manually define the coordinate of
+% % % those points in world coordinate. These points are our tracking points.
 close all;
 clear all;
 v = VideoReader('o.ogv');
-I= read(v,1);
-I=rgb2gray(I);
+I = read(v, 1);
+I = rgb2gray(I);
 points = detectHarrisFeatures(I);
 
 figure, imshow(I), hold on, title('Detected features frame 1');
-plot(points(15:23));
-K = [ -1161         112        -484;
-           0         446       -1133;
-           0           0           1];
-       
+plot(points(15: 23));
+K = [ -1161         112        - 484;
+      0         446       - 1133;
+      0           0           1];
 
-       
-X=[1 0; 
-    2 0;
-    1 1;
-    2 1; 
-    1 2; 
-    2 2;
-    1 3; 
-    1 4;
-    1 5 ;
-    0 4; 
-    0 5];
+% Tracking points in world coordinate
+
+X = [1 0;
+     2 0;
+     1 1;
+     2 1;
+     1 2;
+     2 2;
+     1 3;
+     1 4;
+     1 5 ;
+     0 4;
+     0 5];
 ;
-x=[303 693;
-    402 682;
-    319 781.3;
-    417 771;
-    334 874.3;
-    417.7 866.2;
-    349.5 969.7;
-    364.8 1068;
-    380.1 1169;
-    262 1085;
-    276.4 1187;
+% Image coordinate of tracking points in 1st frame
+x = [303 693;
+     402 682;
+     319 781.3;
+     417 771;
+     334 874.3;
+     417.7 866.2;
+     349.5 969.7;
+     364.8 1068;
+     380.1 1169;
+     262 1085;
+     276.4 1187;
     ];
-x=x'
-X=X'
-H=getH_Homo(x,X);
-P=get_P_from_H(H,K);
+% Using 2 pairs of vectors points, calcuate Homography matrix and the Projection matrix
+x = x'
+    X=X'
+    H = getH_Homo(x, X);
+P = get_P_from_H(H, K);
 
+% Testing by projecting a cube on the caliberated image
+c = [0 0 0 1; 0 1 0 1;   1 1 0 1; 1 0 0 1;  1 0 0.3 1; 0 0 0.3 1; 0 1 0.3 1; 1 1 0.3 1; 1 0 0.3 1; 0 0 0.3 1; 0 0 0 1;
+     1 0 0 1 ; 1 1 0 1; 0 1 0 1; 0 1 0.3 1 ; 1 1 0.3 1; 1 1 0 1];
 
-c=[0 0 0 1; 0 1 0 1;   1 1 0 1; 1 0 0 1;  1 0 0.3 1; 0 0 0.3 1; 0 1 0.3 1; 1 1 0.3 1;1 0 0.3 1; 0 0 0.3 1; 0 0 0 1;
-    1 0 0 1 ; 1 1 0 1; 0 1 0 1;0 1 0.3 1 ;1 1 0.3 1;1 1 0 1];
+c = c';
+    est=P*c;
+    h=size(c,2);
 
-c=c';
-est=P*c;
-h=size(c,2);
-
-for i=1:h
+    for i=1:h
     for k=1:3
     est(k,i)=est(k,i)/est(3,i);
     end
-    
-end
 
-est=est';
-% 
-figure, imshow(I), hold on, title('Detected features frame 1');
-plot(est(:,1),est(:,2),'r')
+    end
+
+    est=est';
+%
+figure, imshow(I), hold on, title('Detected features  and projected cube in frame 1');
+plot(est(:, 1), est(:, 2), 'r')
 
