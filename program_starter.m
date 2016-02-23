@@ -3,18 +3,19 @@
 clc;
 close all;
 clear all;
+warning('off', 'Images:initSize:adjustingMag');
 % Points to be tracked
 X = [ 0 4;
-      0 5;
-      1 0;
-      1 1;
-      1 2;
-      1 3;
-      1 4;
-      1 5;
-      2 0;
-      2 1;
-      2 2];
+    0 5;
+    1 0;
+    1 1;
+    1 2;
+    1 3;
+    1 4;
+    1 5;
+    2 0;
+    2 1;
+    2 2];
 % Track these points in every frame of the video
 videoFileReader = vision.VideoFileReader('o.ogv');
 firstframe = step(videoFileReader);
@@ -39,35 +40,37 @@ i = 0;
 % then call augment function, which takes care of the augmented reality part
 % In this case, we work only for first 65 frames
 while i < 65
-		i = i + 1;
-		% get the next frame
-		videoFrame = step(videoFileReader);
-		[coord_cube, visiblepoints] = augment(videoFrame, pointTracker, X);
-		% Save new frame to image
-		h = figure('visible', 'off');
-		I = rgb2gray(videoFrame);
-		imshow(I), hold on,
-		       plot(coord_cube(:, 1), coord_cube(:, 2), 'r')
-               plot(visiblepoints(:, 1), visiblepoints(:, 2), 'go')
-		       path = './frames';
-		frame_pic = strcat('frame', num2str(i), '.png');
-		saveas(h, fullfile(path, frame_pic));
-		close(gcf)
-
-
+    mes=strcat('Processing frames...', num2str(i));
+    disp(mes)
+    i = i + 1;
+    % get the next frame
+    videoFrame = step(videoFileReader);
+    [coord_cube, visiblepoints] = augment(videoFrame, pointTracker, X);
+    % Save new frame to image
+    h = figure('visible', 'off');
+    I = rgb2gray(videoFrame);
+    imshow(I,'InitialMagnification',50), hold on,
+    plot(coord_cube(:, 1), coord_cube(:, 2), 'r','LineWidth',1.4)
+    plot(visiblepoints(:, 1), visiblepoints(:, 2), 'go')
+    path = './frames';
+    frame_pic = strcat('frame', num2str(i), '.png');
+    saveas(h, fullfile(path, frame_pic));
+    close(gcf)
+    
+    
 end
 vidObj = VideoWriter('aug_video.avi');
 vidObj.FrameRate = 23;
 open(vidObj);
 % Save augmented frames to new video
 for i = 1 : 64
-        path = './frames/';
-		frame_pic = strcat('frame', num2str(i), '.png');
-		frame_pic = strcat(path, frame_pic);
-		Img = imread(frame_pic);
-		% add the image to your movie:
-		f = im2frame(Img);
-		writeVideo(vidObj, f);
-
+    path = './frames/';
+    frame_pic = strcat('frame', num2str(i), '.png');
+    frame_pic = strcat(path, frame_pic);
+    Img = imread(frame_pic);
+    % add the image to your movie:
+    f = im2frame(Img);
+    writeVideo(vidObj, f);
+    
 end
 close(vidObj)

@@ -1,4 +1,7 @@
-function [R,Q] = rq(A)
-[q,r]=qr(A');
-R=r';Q=q';
-end
+function [R Q] = rq(M)
+[Q,R] = qr(flipud(M)')
+R = flipud(R');
+R = fliplr(R);
+
+Q = Q';
+Q = flipud(Q);
