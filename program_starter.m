@@ -17,7 +17,7 @@ X = [ 0 4;
     2 1;
     2 2];
 % Track these points in every frame of the video
-videoFileReader = vision.VideoFileReader('o.ogv');
+videoFileReader = vision.VideoFileReader('o.avi');
 firstframe = step(videoFileReader);
 
 I = rgb2gray(firstframe);

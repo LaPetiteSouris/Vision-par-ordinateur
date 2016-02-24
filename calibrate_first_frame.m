@@ -2,7 +2,7 @@
 % % % Firstly, we detect Harris features points, then manually define the coordinate of
 % % % those points in world coordinate. These points are our tracking points.
 
-v = VideoReader('o.ogv');
+v = VideoReader('o.avi');
 I = read(v, 1);
 I = rgb2gray(I);
 points = detectHarrisFeatures(I);
@@ -12,10 +12,10 @@ plot(points(15: 23));
 
 
 K =[
-
-           2239.9398557735         -38.2539086481364          1738.67177844411;
-                         0          2201.84011397067          1896.54836489851;
-                         0                         0                         1];
+    
+2239.9398557735         -38.2539086481364          1738.67177844411;
+0          2201.84011397067          1896.54836489851;
+0                         0                         1];
 
 
 
