@@ -8,7 +8,11 @@ I = rgb2gray(I);
 points = detectHarrisFeatures(I);
 
 figure, imshow(I), hold on, title('Detected features frame 1');
-plot(points(15: 23));
+% We take only strong corner points
+for i=15:1:23
+    point=points(i);
+    plot(point.Location(1),point.Location(2),'go', 'LineWidth',3);
+end
 
 
 K =[
